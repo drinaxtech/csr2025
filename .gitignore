@@ -1,0 +1,64 @@
+# Laravel & PHP
+/vendor/
+/node_modules/
+/public/build/
+/storage/*.key
+/storage/app/*
+/storage/debugbar/*
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+.env
+.env.*.local
+Homestead.json
+Homestead.yaml
+.phpunit.result.cache
+
+# Laravel IDE helper
+/_ide_helper.php
+/_ide_helper_models.php
+
+# Composer
+composer.lock
+
+# Vite / Vue / Node
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+/dist/
+/public/hot
+/public/mix-manifest.json
+/public/vite-manifest.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+/.idea/
+/.vscode/
+/*.sublime-project
+/*.sublime-workspace
+
+# JetBrains
+out/
+
+# Mac
+.AppleDouble
+.LSOverride
+
+# Windows
+Desktop.ini
+$RECYCLE.BIN/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Optional: ignore Docker build files if you rebuild locally
+docker-compose.override.yml
+
+# End of file
