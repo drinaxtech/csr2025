@@ -16,6 +16,11 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
+        @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
         @inertia
     </body>
 </html>

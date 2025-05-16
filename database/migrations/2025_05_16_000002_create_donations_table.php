@@ -20,7 +20,6 @@ return new class extends Migration
                   ->cascadeOnDelete();
             $table->decimal('amount', 15, 2);
             $table->timestamp('donated_at')->useCurrent();
-            $table->string('gateway_transaction_id')->nullable();
             $table->timestamps();
         });
     }

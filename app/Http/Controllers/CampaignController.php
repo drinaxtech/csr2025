@@ -18,10 +18,26 @@ class CampaignController extends Controller
     {
         $search = $request->input('search');
         $page = $request->input('page', 1); // Get the current page number
+        
 
         $campaigns = Campaign::query()
-            ->withSum('donations', 'amount')
+            ->withSum([
+        'donations' => function ($query) {
+            $query->whereHas('transactions', function ($query) {
+                $query->where('status', 'success'); // Correct Enum Usage
+            });
+        }
+    ], 'amount')
+            ->where('status', 'active') 
+            ->where(function ($query) {
+                $query->where('starts_at', '<=', now())
+                      ->orWhere('ends_at', '>=', now());
+            })
+            ->whereNot('created_by', Auth::id())
             ->when($search, function ($query, $search) {
+                if(empty($search)) {
+                    return;
+                }
                 $query->where('title', 'like', '%' . $search . '%')
                       ->orWhere('description', 'like', '%' . $search . '%');
             })
@@ -99,7 +115,12 @@ class CampaignController extends Controller
      */
     public function show(Campaign $campaign)
     {
-        $campaign->loadSum('donations', 'amount');
+        //$campaign->loadSum('donations', 'amount');
+        $campaign->loadSum(['donations' => function ($query) {
+            $query->whereHas('transactions', function ($query) {
+                $query->where('status', 'success'); // Use the enum value
+            });
+        }], 'amount');
         return Inertia::render('Campaigns/Show', [
             'campaign' => $campaign,
         ]);

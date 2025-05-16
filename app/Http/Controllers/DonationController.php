@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Campaign;
 use App\Models\Donation;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use \Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\DonationConfirmation;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+// use App\Services\PaymentServiceFactory;
+use App\Models\Transaction\TransactionStatus;
+use App\Models\Transaction\PaymentGateway;
+use App\Models\Transaction\RefundStatus;
 
 class DonationController extends Controller
 {
@@ -45,27 +52,60 @@ class DonationController extends Controller
             // Add validation for payment method if implemented
         ]);
 
-        $donation = Donation::create([
-            'user_id' => Auth::user()->id,
-            'campaign_id' => $campaign->id,
-            'amount' => $request->amount,
-            'donated_at' => now(),
-            // Add payment status and other relevant fields later
-        ]);
-        //$donation->save();
+        $amount = $request->amount;
+        $currency = 'USD'; // Could be made dynamic
+        $paymentGateway = $request->payment_gateway;
+        $paymentData = $request->payment_data;
 
-        // Load the user and campaign to pass to the email
-        $user = Auth::user();
-        $campaign->load('user'); 
+        // Generate unique transaction ID
+        $transactionId = Str::uuid()->toString();
+
+        DB::beginTransaction();
+
+            $user = Auth::user();
+            // Create Donation Record
+            $donation = Donation::create([
+                'user_id' => $user->id,
+                'campaign_id' => $campaign->id,
+                'amount' => $amount,
+                'donated_at' => now(),
+            ]);
+
+            // Determine Payment Gateway and Process Payment
+            // Make sure PaymentServiceFactory exists in App\Services namespace
+            $paymentService = app()->make("App\\Services\\Payment\\PaymentServiceFactory")::make($paymentGateway);
+
+            $paymentResponse = $paymentService->processPayment([
+                'amount' => $amount * 100,  // Stripe/PayPal expects amount in cents
+                'currency' => $currency,
+                'payment_data' => $paymentData,
+                'description' => "Donation to {$campaign->title}",
+            ]);
+
+            // Determine transaction status
+            $transactionStatus = isset($paymentResponse['status']) ? $paymentResponse['status'] : 'failed';
+
+            // Save Transaction Record
+            $transaction = Transaction::create([
+                'donation_id' => $donation->id,
+                'payment_gateway' => 'cash',
+                'transaction_id' => $transactionId,
+                'status' => 'success',
+                'amount' => $amount,
+                'currency' => $currency,
+                'response_data' => $paymentResponse,
+                'refund_id' => null,
+                'refund_status' => null,
+            ]);
+
+            DB::commit();
+
+            // Send Email Confirmation
+            Mail::to($user->email)->send(new DonationConfirmation($donation, $campaign, $user));
+
+            return redirect()->route('donations.success', [$campaign->id, $donation->id, $transaction->id]);
 
 
-        // Optionally, you might want to trigger an event here for donation confirmation
-        // event(new DonationCreated($donation));
-
-         // Send the confirmation email
-        Mail::to($user->email)->send(new DonationConfirmation($donation, $campaign, $user));
-
-        return redirect()->route('campaigns.show', $campaign->id)->with('success', 'Thank you for your donation! A confirmation email has been sent to your address.');
     }
 
     /**
@@ -92,4 +132,15 @@ class DonationController extends Controller
             'donations' => $donations,
         ]);
     }
+
+    public function donationSuccess(Campaign $campaign, Donation $donation, Transaction $transaction)
+    {
+    
+        return Inertia::render('Donations/DonationSuccess', [
+            'campaign' => $campaign,
+            'donation' => $donation,
+            'transaction' => $transaction
+        ]);
+    }
+
 }

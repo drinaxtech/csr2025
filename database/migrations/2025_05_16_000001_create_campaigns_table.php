@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('goal_amount', 15, 2);
             $table->string('image_url')->nullable();
-            $table->enum('status', ['draft', 'active', 'closed'])
-                  ->default('draft');
+            $table->enum('status', ['active', 'closed'])
+                  ->default('active');
             $table->timestamp('starts_at');
             $table->timestamp('ends_at');
             $table->timestamps();

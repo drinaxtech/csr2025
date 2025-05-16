@@ -42,9 +42,7 @@
                                 :pagination-settings="{ initialPage: 1, rowsPerPage: 10, showPerPageOptions: true, noResultsText: 'No campaigns found' }"
                             >
                                 <template #item-title="item">
-                                    <Link :href="route('campaigns.show', item.id)" class="text-indigo-600 font-medium hover:underline">
-                                        {{ item.title }}
-                                    </Link>
+                                    {{ item.title }}
                                 </template>
 
                                 <template #item-description="item">

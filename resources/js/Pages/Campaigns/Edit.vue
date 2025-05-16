@@ -1,5 +1,5 @@
 <template>
-    <AuthenticatedLayout>
+    <DashboardLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Edit Campaign
@@ -49,11 +49,11 @@
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </DashboardLayout>
 </template>
 
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import DashboardLayout from '@/Layouts/DashboardLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { onMounted } from 'vue';
 
