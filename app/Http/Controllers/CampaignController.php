@@ -201,67 +201,21 @@ class CampaignController extends Controller
      * @param  \App\Models\Campaign  $campaign
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Campaign $campaign)
+    public function close(Campaign $campaign)
     {
         if ($campaign->created_by !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
-
-        $campaign->delete();
-        return redirect()->route('campaigns.index')->with('success', 'Campaign deleted successfully.');
-    }
-
-    public function checkout(Request $request, Campaign $campaign)
-    {
-        $request->validate([
-            'amount' => 'required|numeric|min:1',
-        ]);
-
-
-
-        /*
-
-        $stripe = new StripeClient(config('services.stripe.secret'));
-
-        try {
-            $checkoutSession = $stripe->checkout->sessions->create([
-                'line_items' => [[
-                    'price_data' => [
-                        'currency' => 'usd',
-                        'unit_amount' => $request->amount * 100, // Stripe handles amounts in cents
-                        'product_data' => [
-                            'name' => $campaign->title . ' Donation',
-                            'description' => 'Donation to ' . $campaign->title,
-                        ],
-                    ],
-                    'quantity' => 1,
-                ]],
-                'mode' => 'payment',
-                'success_url' => route('donations.success', $campaign->id), // Define a success route
-                'cancel_url' => route('donations.cancel', $campaign->id),   // Define a cancel route
+    
+        $campaign->status = 'closed'; // Or use an enum if you have one
+        
+        if($campaign->save()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Deleted successfully',
             ]);
-
-            return inertia()->redirect($checkoutSession->url);
-            // Or, if you need to pass the URL back to Inertia for a client-side redirect:
-            // return inertia('')->with(['paymentUrl' => $checkoutSession->url]);
-
-        } catch (\Stripe\Exception\ApiErrorException $e) {
-            // Handle Stripe API errors
-            return back()->withErrors(['payment' => $e->getMessage()]);
         }
-            */
+
     }
 
-    public function success(Campaign $campaign)
-    {
-        // Handle successful payment (update database, show thank you page)
-        // You'll likely want to verify the payment using Stripe's API or webhooks
-        return inertia('Donations/Success', ['campaign' => $campaign]);
-    }
-
-    public function cancel(Campaign $campaign)
-    {
-        // Handle cancelled payment (show a message to the user)
-        return inertia('Donations/Cancel', ['campaign' => $campaign]);
-    }
 }

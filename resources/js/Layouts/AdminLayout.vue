@@ -11,7 +11,7 @@
                         </Link>
                     </div>
                     <div class="flex items-center ml-6">
-                        <div class="relative mr-4">
+                        <div style="display: none;" class="relative mr-4">
                             <button @click="isNotificationsOpen = !isNotificationsOpen" class="bg-white rounded-full p-2 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" aria-expanded="false" aria-haspopup="true">
                                 <span class="sr-only">Notifications</span>
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-6-6C5.928 5 4 6.979 4 9.5V17l2 2v-1.581A2 2 0 005 15.75h14a2 2 0 00-1.819-3.191L15 17z" /></svg>
@@ -63,16 +63,13 @@
                         Dashboard
                     </Link>
                     <Link :href="route('admin.mail.settings.index')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('campaigns.index') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-    <polyline points="22 6 12 13 2 6"></polyline>
-</svg>
-
-
-                        Settings
+                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        Email Settings
                     </Link>
 
-                    </nav>
+                </nav>
             </div>
         </aside>
 

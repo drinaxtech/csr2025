@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Campaign Routes
     Route::resource('campaigns', CampaignController::class);
     Route::get('/my-campaigns', [CampaignController::class, 'myCampaigns'])->name('my-campaigns');
+    Route::post('/campaigns/close/{campaign}', [CampaignController::class, 'close'])->name('campaigns.close');
 
     // Donation Routes
     Route::get('/campaigns/{campaign}/donate', [DonationController::class, 'create'])->name('donations.create');
@@ -37,7 +38,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('/parameters', ParameterController::class)->only(['index', 'edit', 'update']);
     Route::get('/mail/settings', [MailSettingsController::class, 'index'])->name('mail.settings.index');
     Route::post('/mail/settings', [MailSettingsController::class, 'update'])->name('mail.settings.update');
 });

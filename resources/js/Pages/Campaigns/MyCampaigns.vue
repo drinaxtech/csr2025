@@ -87,7 +87,7 @@
 
 <script setup>
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
@@ -108,10 +108,10 @@ const headers = ref([
 ]);
 
 const destroy = (id) => {
-    if (confirm('Are you sure you want to delete this campaign?')) {
-        axios.delete(route('campaigns.destroy', id)).then(() => {
-            usePage().reload();
-        });
-    }
+  if (confirm('Are you sure you want to delete this campaign?')) {
+    axios.post(route('campaigns.close', id)).then(() => {
+       router.visit(window.location.href);
+    });
+  }
 };
 </script>
