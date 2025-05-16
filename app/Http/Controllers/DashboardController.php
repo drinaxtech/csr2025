@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+
+    public function __construct()
+    {
+        // You can also use $this->middleware() here.
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            abort(404, 'Not found');
+        }
+    }
     /**
      * Display the admin dashboard.
      *
@@ -16,34 +24,27 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user = Auth::user(); // Assuming you want statistics related to the logged-in user's campaigns
+        $user = Auth::user();
 
-        $activeCampaignsCount = Campaign::where('created_by', $user->id) // <--- This line caused the error
+        $activeCampaignsCount = Campaign::where('created_by', $user->id)->where('status', 'active')->count();
 
+        $reachedGoalCampaignsCount = Campaign::where('created_by', $user->id)
+            ->withSum([
+                'donations' => function ($query) {
+                    $query->whereHas('transactions', function ($query) {
+                        $query->where('status', 'success');
+                    });
+                }
+            ], 'amount')
+            ->having('donations_sum_amount', '>=', \Illuminate\Support\Facades\DB::raw('goal_amount'))
             ->count();
 
-        $reachedGoalCampaignsCount = Campaign::where('created_by', $user->id) // <--- This line caused the error
-   
-            ->where('goal_amount', '<=', function ($query) {
-                $query->selectRaw('SUM(amount)')
-                    ->from('donations')
-                    ->whereColumn('campaign_id', 'campaigns.id');
-            })
-            ->count();
-
-        // Another way to get reached goal campaigns using the model attribute:
-        $reachedGoalCampaignsCountEloquent = Campaign::where('created_by', $user->id) // <--- This line caused the error
-      
-            ->get()
-            ->filter(function ($campaign) {
-                return $campaign->reached_goal;
-            })
-            ->count();
+       
 
 
         return Inertia::render('Dashboard', [
             'activeCampaignsCount' => $activeCampaignsCount,
-            'reachedGoalCampaignsCount' => $reachedGoalCampaignsCountEloquent,
+            'reachedGoalCampaignsCount' => $reachedGoalCampaignsCount,
             // You can also pass other relevant dashboard data here
         ]);
     }

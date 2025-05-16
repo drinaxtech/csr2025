@@ -1,5 +1,5 @@
 <template>
-  <Head :title="pageTitle" />
+  <Head title="Campaigns" />
   <DashboardLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -12,12 +12,7 @@
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div class="p-6 bg-white border-b border-gray-200">
             <div class="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between">
-              <Link
-                :href="route('campaigns.create')"
-                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-500 active:bg-indigo-700 focus:outline-none focus:border-indigo-700 focus:ring focus:ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150 mb-4 sm:mb-0"
-              >
-                Create New Campaign
-              </Link>
+
               <div class="ml-0 sm:ml-4 flex items-center w-full sm:w-auto">
                 <input
                   type="text"

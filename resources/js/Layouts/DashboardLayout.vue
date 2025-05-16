@@ -63,15 +63,22 @@
                         Dashboard
                     </Link>
                     <Link :href="route('campaigns.index')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('campaigns.index') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
-                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-2m3-9l-3 3m-3-3l-3 3m-3-3l-3 3m9-9l3 3m-3-3l3 3m-3-3l3 3" /></svg>
+                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M5 15V5h12l2 4-2 4H7v6H5zm10-8h4m-8 4l2 2 4-4"/>
+</svg>
                         All Campaigns
                     </Link>
                     <Link :href="route('my-campaigns')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('my-campaigns') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
-                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 14.364a9 9 0 01-12 0" /></svg>
+                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M5 15V5h12l2 4-2 4H7v6H5zm10-8h4m-8 4l2 2 4-4"/>
+</svg>
                         My Campaigns
                     </Link>
-                    <Link :href="route('donations.history')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('my-campaigns') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
-                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 14.364a9 9 0 01-12 0" /></svg>
+                    <Link :href="route('donations.history')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('donations.history') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
+                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v3m-5-5v5m-5-5v5M3 10h2m14 0h2M12 6l-2.5 3L12 12l2.5-3L12 6z"/></svg>
                         Donations History
                     </Link>
                 </nav>

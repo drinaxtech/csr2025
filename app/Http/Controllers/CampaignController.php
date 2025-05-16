@@ -9,6 +9,14 @@ use \Illuminate\Support\Facades\Auth;
 
 class CampaignController extends Controller
 {
+
+    public function __construct()
+    {
+        // You can also use $this->middleware() here.
+        if (Auth::check() && Auth::user()->role == 'admin') {
+            abort(404, 'Not found');
+        }
+    }
     /**
      * Display a listing of the campaigns.
      *
@@ -63,7 +71,13 @@ class CampaignController extends Controller
      */
     public function myCampaigns()
     {
-        $userCampaigns = Campaign::where('created_by', Auth::id())->where('status', 'active')->latest()->get();
+        $userCampaigns = Campaign::where('created_by', Auth::id())->where('status', 'active')->withSum([
+                'donations' => function ($query) {
+                    $query->whereHas('transactions', function ($query) {
+                        $query->where('status', 'success'); // Correct Enum Usage
+                    });
+                }
+            ], 'amount')->latest()->get();
         return Inertia::render('Campaigns/MyCampaigns', [
             'campaigns' => $userCampaigns,
         ]);
@@ -192,7 +206,7 @@ class CampaignController extends Controller
             'ends_at' => $request->ends_at,
         ]);
 
-        return redirect()->route('campaigns.index')->with('success', 'Campaign updated successfully.');
+        return redirect()->route('my-campaigns')->with('success', 'Campaign updated successfully.');
     }
 
     /**
