@@ -23,6 +23,9 @@ Homestead.yaml
 # Composer
 composer.lock
 
+# NPM
+package-lock.json
+
 # Vite / Vue / Node
 npm-debug.log*
 yarn-error.log*
