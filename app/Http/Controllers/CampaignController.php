@@ -63,7 +63,7 @@ class CampaignController extends Controller
      */
     public function myCampaigns()
     {
-        $userCampaigns = Campaign::where('created_by', Auth::id())->latest()->get();
+        $userCampaigns = Campaign::where('created_by', Auth::id())->where('status', 'active')->latest()->get();
         return Inertia::render('Campaigns/MyCampaigns', [
             'campaigns' => $userCampaigns,
         ]);
