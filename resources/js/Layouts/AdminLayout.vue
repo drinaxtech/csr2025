@@ -63,13 +63,15 @@
                         Dashboard
                     </Link>
                     <Link :href="route('admin.mail.settings.index')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('campaigns.index') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
-                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-2m3-9l-3 3m-3-3l-3 3m-3-3l-3 3m9-9l3 3m-3-3l3 3m-3-3l3 3" /></svg>
-                        All Campaigns
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+    <polyline points="22 6 12 13 2 6"></polyline>
+</svg>
+
+
+                        Settings
                     </Link>
-                    <Link :href="route('my-campaigns')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('my-campaigns') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
-                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 14.364a9 9 0 01-12 0" /></svg>
-                        My Campaigns
-                    </Link>
+
                     </nav>
             </div>
         </aside>

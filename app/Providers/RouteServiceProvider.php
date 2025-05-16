@@ -15,8 +15,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->routes(function () {
-            // API routes (prefix /api, uses api middleware group)
-           
 
             // Web routes (all others, uses web middleware group)
             Route::middleware('web')
