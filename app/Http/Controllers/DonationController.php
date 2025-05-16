@@ -12,10 +12,6 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\DonationConfirmation;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-// use App\Services\PaymentServiceFactory;
-use App\Models\Transaction\TransactionStatus;
-use App\Models\Transaction\PaymentGateway;
-use App\Models\Transaction\RefundStatus;
 
 class DonationController extends Controller
 {
@@ -121,7 +117,7 @@ class DonationController extends Controller
         ]);
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $donations = Donation::with(['user', 'campaign'])
             ->where('user_id', Auth::user()->id) // Only show donations for the logged-in user

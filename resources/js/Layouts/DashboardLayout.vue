@@ -70,7 +70,11 @@
                         <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 14.364a9 9 0 01-12 0" /></svg>
                         My Campaigns
                     </Link>
-                    </nav>
+                    <Link :href="route('donations.history')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('my-campaigns') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
+                        <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 14.364a9 9 0 01-12 0" /></svg>
+                        Donations History
+                    </Link>
+                </nav>
             </div>
         </aside>
 

@@ -1,4 +1,5 @@
 <template>
+    <Head title="My Campaigns" />
     <DashboardLayout>
         <template #header>
             <div class="flex items-center justify-between">
@@ -114,4 +115,5 @@ const destroy = (id) => {
     });
   }
 };
+
 </script>

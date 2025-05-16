@@ -1,4 +1,5 @@
 <template>
+    <Head title="Donation History" />
     <DashboardLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -21,7 +22,7 @@
                                     class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
                                 />
                             </div>
-                            </div>
+                        </div>
 
                         <div v-if="donations && donations.length > 0">
                             <EasyDataTable
