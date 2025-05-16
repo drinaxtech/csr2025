@@ -64,6 +64,7 @@
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
     mailConfig: Object,
@@ -83,10 +84,15 @@ const submit = () => {
     axios.post('/admin/mail/settings', form.data()) // Use the actual URL
         .then(response => {
             if (response.data.success) {
-                alert(response.data.success); // Or handle success message as needed
+                Swal.fire(
+                    'Saved!',
+                    'Your settings are saved.',
+                    'success'
+                );
             } else if (response.data.errors) {
                 form.setErrors(response.data.errors); // Handle validation errors
             }
+            
         })
         .catch(error => {
             console.error("Error saving mail settings:", error);
