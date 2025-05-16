@@ -22,12 +22,12 @@ class CampaignController extends Controller
 
         $campaigns = Campaign::query()
             ->withSum([
-        'donations' => function ($query) {
-            $query->whereHas('transactions', function ($query) {
-                $query->where('status', 'success'); // Correct Enum Usage
-            });
-        }
-    ], 'amount')
+                'donations' => function ($query) {
+                    $query->whereHas('transactions', function ($query) {
+                        $query->where('status', 'success'); // Correct Enum Usage
+                    });
+                }
+            ], 'amount')
             ->where('status', 'active') 
             ->where(function ($query) {
                 $query->where('starts_at', '<=', now())

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return redirect('/login');
+    return Inertia::location('/login');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -38,8 +38,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::resource('/parameters', ParameterController::class)->only(['index', 'edit', 'update']);
-    Route::get('/mail/settings', [MailSettingsController::class, 'index'])->name('admin.mail.settings.index');
-    Route::post('/mail/settings', [MailSettingsController::class, 'update'])->name('admin.mail.settings.update');
+    Route::get('/mail/settings', [MailSettingsController::class, 'index'])->name('mail.settings.index');
+    Route::post('/mail/settings', [MailSettingsController::class, 'update'])->name('mail.settings.update');
 });
 
 require __DIR__.'/auth.php';
