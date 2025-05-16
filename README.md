@@ -12,7 +12,7 @@ CSR2025 is a Laravel-based web application designed to empower employees of larg
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Laravel 11, PHP 8.4
+- **Backend**: Laravel 12, PHP 8.4
 - **Frontend**: Vue.js 3, Inertia.js, Tailwind CSS
 - **Database**: MySQL 8
 - **Tooling**: Composer, Vite, Node.js, NPM
@@ -56,7 +56,7 @@ CSR2025 is a Laravel-based web application designed to empower employees of larg
 
 5. **Database Migration**:
    ```bash
-   php artisan migrate
+   php artisan migrate --seed
    ```
 
 6. **Build Assets**:
