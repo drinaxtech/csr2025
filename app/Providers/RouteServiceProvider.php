@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use App\Http\Middleware\Admin;
+use Illuminate\Support\Facades\Auth;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -22,5 +23,22 @@ class RouteServiceProvider extends ServiceProvider
                  ->group(base_path('routes/web.php'));
             Route::aliasMiddleware('admin', Admin::class);
         });
+    }
+
+    /**
+     * Get the post-authentication redirect path.
+     *
+     * @return string
+     */
+    public static function getRedirectRoute()
+    {
+        if (Auth::check()) {
+            if (Auth::user()->role === 'admin') {
+                return '/admin/dashboard'; // Redirect admin users
+            } else {
+                return '/dashboard'; // Or wherever you want other users to go
+            }
+        }
+        return '/login'; // Default if not authenticated.
     }
 }

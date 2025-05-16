@@ -18,9 +18,21 @@ class AdminDashboardController extends Controller
     public function index()
     {
         $totalCampaigns = Campaign::count();
-        $totalDonations = Donation::sum('amount');
-        $totalUsers = User::count();
-        $recentDonations = Donation::latest()->take(5)->get();
+        // Calculate total donations with successful transactions using the relationship
+    $totalDonations = Donation::whereHas('transactions', function ($query) {
+        $query->where('status', 'success');
+    })->sum('amount');
+
+    $totalUsers = User::where('role', 'employee')->count();
+
+    // Get recent donations with successful transactions using the relationship
+    $recentDonations = Donation::whereHas('transactions', function ($query) {
+        $query->where('status', 'success');
+    })
+        ->with(['user', 'campaign', 'transactions']) // Eager load transactions as well
+        ->latest()
+        ->take(5)
+        ->get();
 
         return Inertia::render('Admin/Dashboard', [
             'totalCampaigns' => $totalCampaigns,
