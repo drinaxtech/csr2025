@@ -11,12 +11,12 @@ use function Pest\Laravel\post;
 uses(RefreshDatabase::class);
 
 it('only administrators can access the mail settings page', function () {
-    $user = User::factory()->create_one(['is_admin' => false]);
+    $user = User::factory()->create_one(['role' => 'employee']);
     actingAs($user)
         ->get(route('admin.mail.settings.index'))
         ->assertForbidden();
 
-    $admin = User::factory()->create_one(['is_admin' => true]);
+    $admin = User::factory()->create_one(['role' => 'admin']);
     actingAs($admin)
         ->get(route('admin.mail.settings.index'))
         ->assertOk()
@@ -24,7 +24,7 @@ it('only administrators can access the mail settings page', function () {
 });
 
 it('administrators can update mail settings', function () {
-    $admin = User::factory()->create_one(['is_admin' => true]);
+    $admin = User::factory()->create_one(['role' => 'admin']);
     actingAs($admin)
         ->post(route('admin.mail.settings.update'), [
             'driver' => 'smtp',
@@ -44,7 +44,7 @@ it('administrators can update mail settings', function () {
 });
 
 it('administrators can test mail connection', function () {
-    $admin = User::factory()->create_one(['is_admin' => true]);
+    $admin = User::factory()->create_one(['role' => 'admin']);
     actingAs($admin)
         ->post(route('admin.mail.test'), [
             'driver' => 'smtp',
@@ -60,7 +60,7 @@ it('administrators can test mail connection', function () {
 });
 
 it('validation works for updating mail settings', function () {
-    $admin = User::factory()->create_one(['is_admin' => true]);
+    $admin = User::factory()->create_one(['role' => 'admin']);
     actingAs($admin)
         ->post(route('admin.mail.settings.update'), [
             'driver' => '',
