@@ -1,0 +1,246 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Campaign;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use \Illuminate\Support\Facades\Auth;
+
+class CampaignController extends Controller
+{
+    /**
+     * Display a listing of the campaigns.
+     *
+     * @return \Inertia\Response
+     */
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
+        $page = $request->input('page', 1); // Get the current page number
+
+        $campaigns = Campaign::query()
+            ->withSum('donations', 'amount')
+            ->when($search, function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                      ->orWhere('description', 'like', '%' . $search . '%');
+            })
+            ->paginate(10, ['*'], 'page', $page); // Paginate with the current page
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'data' => $campaigns->items(),
+                'next_page_url' => $campaigns->nextPageUrl(),
+            ]);
+        }
+
+        return Inertia::render('Campaigns/Index', [
+            'campaigns' => $campaigns,
+            'search' => $search
+        ]);
+    }
+
+    /**
+     * Display a listing of the logged-in user's campaigns.
+     *
+     * @return \Inertia\Response
+     */
+    public function myCampaigns()
+    {
+        $userCampaigns = Campaign::where('created_by', Auth::id())->latest()->get();
+        return Inertia::render('Campaigns/MyCampaigns', [
+            'campaigns' => $userCampaigns,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new campaign.
+     *
+     * @return \Inertia\Response
+     */
+    public function create()
+    {
+        return Inertia::render('Campaigns/Create');
+    }
+
+    /**
+     * Store a newly created campaign in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'goal_amount' => 'required|numeric|min:0',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date|after:starts_at',
+        ]);
+
+        Campaign::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'goal_amount' => $request->goal_amount,
+            'starts_at' => $request->starts_at,
+            'ends_at' => $request->ends_at,
+            'created_by' => Auth::user()->id, // Assuming authenticated user creates the campaign
+        ]);
+
+        return redirect()->route('campaigns.index')->with('success', 'Campaign created successfully.');
+    }
+
+    /**
+     * Display the specified campaign.
+     *
+     * @param  \App\Models\Campaign  $campaign
+     * @return \Inertia\Response
+     */
+    public function show(Campaign $campaign)
+    {
+        $campaign->loadSum('donations', 'amount');
+        return Inertia::render('Campaigns/Show', [
+            'campaign' => $campaign,
+        ]);
+    }
+
+    /**
+     * Display a list of donations for a specific campaign.
+     *
+     * @param  \App\Models\Campaign  $campaign
+     * @return \Inertia\Response
+     */
+    public function showDonations(Campaign $campaign)
+    {
+        if ($campaign->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $donations = $campaign->donations()->latest()->with('user')->get();
+
+        return Inertia::render('Campaigns/DonationsList', [
+            'campaign' => $campaign,
+            'donations' => $donations,
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified campaign.
+     *
+     * @param  \App\Models\Campaign  $campaign
+     * @return \Inertia\Response
+     */
+    public function edit(Campaign $campaign)
+    {
+        if ($campaign->created_by !== Auth::id()) {
+            abort(404, 'Not found');
+        }
+
+        return Inertia::render('Campaigns/Edit', [
+            'campaign' => $campaign,
+        ]);
+    }
+
+    /**
+     * Update the specified campaign in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Campaign  $campaign
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, Campaign $campaign)
+    {
+        if ($campaign->created_by !== Auth::id()) {
+            abort(404, 'Not found');
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'goal_amount' => 'required|numeric|min:0',
+            'starts_at' => 'required|date',
+            'ends_at' => 'required|date|after:starts_at',
+        ]);
+
+        $campaign->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'goal_amount' => $request->goal_amount,
+            'starts_at' => $request->starts_at,
+            'ends_at' => $request->ends_at,
+        ]);
+
+        return redirect()->route('campaigns.index')->with('success', 'Campaign updated successfully.');
+    }
+
+    /**
+     * Remove the specified campaign from storage.
+     *
+     * @param  \App\Models\Campaign  $campaign
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(Campaign $campaign)
+    {
+        if ($campaign->created_by !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $campaign->delete();
+        return redirect()->route('campaigns.index')->with('success', 'Campaign deleted successfully.');
+    }
+
+    public function checkout(Request $request, Campaign $campaign)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+        ]);
+
+
+
+        /*
+
+        $stripe = new StripeClient(config('services.stripe.secret'));
+
+        try {
+            $checkoutSession = $stripe->checkout->sessions->create([
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'unit_amount' => $request->amount * 100, // Stripe handles amounts in cents
+                        'product_data' => [
+                            'name' => $campaign->title . ' Donation',
+                            'description' => 'Donation to ' . $campaign->title,
+                        ],
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('donations.success', $campaign->id), // Define a success route
+                'cancel_url' => route('donations.cancel', $campaign->id),   // Define a cancel route
+            ]);
+
+            return inertia()->redirect($checkoutSession->url);
+            // Or, if you need to pass the URL back to Inertia for a client-side redirect:
+            // return inertia('')->with(['paymentUrl' => $checkoutSession->url]);
+
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            // Handle Stripe API errors
+            return back()->withErrors(['payment' => $e->getMessage()]);
+        }
+            */
+    }
+
+    public function success(Campaign $campaign)
+    {
+        // Handle successful payment (update database, show thank you page)
+        // You'll likely want to verify the payment using Stripe's API or webhooks
+        return inertia('Donations/Success', ['campaign' => $campaign]);
+    }
+
+    public function cancel(Campaign $campaign)
+    {
+        // Handle cancelled payment (show a message to the user)
+        return inertia('Donations/Cancel', ['campaign' => $campaign]);
+    }
+}
