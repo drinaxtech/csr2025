@@ -1,0 +1,20 @@
+parameters:
+    level: 8
+    paths:
+        - app/
+        - config/
+        - database/
+        - routes/
+    excludePaths:
+        - database/migrations/
+        - resources/
+        - storage/
+        - vendor/
+    checkGenericAcceptance: true
+    checkGenericVariance: true
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Relations\\HasMany::transactions\(\).#'
+        - '#Access to an undefined property \$transaction#'
+        - '#Parameter \#1 \$campaign of function App\\Http\\Controllers\\CampaignController::show\(\) expects App\\Models\\Campaign, App\\Models\\Donation given.#'
+        - '#Method Illuminate\\Http\\RedirectResponse::with\(\) should return an instance of e.g. Illuminate\\Http\\RedirectResponse::with\(\)#'
