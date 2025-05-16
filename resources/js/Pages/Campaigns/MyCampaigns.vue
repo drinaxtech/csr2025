@@ -105,7 +105,8 @@ import { ref } from 'vue';
 import EasyDataTable from 'vue3-easy-data-table';
 import 'vue3-easy-data-table/dist/style.css';
 import axios from 'axios';
-import * as XLSX from 'xlsx'; // Import the xlsx library
+import * as XLSX from 'xlsx';
+import Swal from 'sweetalert2';
 
 const props = defineProps({
   campaigns: Array,
@@ -124,11 +125,26 @@ const headers = ref([
 ]);
 
 const destroy = (id) => {
-  if (confirm('Are you sure you want to delete this campaign?')) {
-    axios.post(route('campaigns.close', id)).then(() => {
-      router.visit(window.location.href);
-    });
-  }
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios.post(route('campaigns.close', id)).then(() => {
+        router.visit(window.location.href);
+        Swal.fire(
+          'Deleted!',
+          'Your campaign has been deleted.',
+          'success'
+        );
+      });
+    }
+  });
 };
 
 const exportToXlsx = () => {

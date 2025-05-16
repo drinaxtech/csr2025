@@ -20,6 +20,7 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "sweetalert2": "^11.21.1",
         "vue3-easy-data-table": "^1.5.47",
         "xlsx": "^0.18.5"
     }
