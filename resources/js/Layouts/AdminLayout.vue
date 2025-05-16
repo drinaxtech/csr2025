@@ -40,7 +40,7 @@
                             </button>
                             <div v-if="isUserMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg origin-top-right">
                                 <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button">
-                                    <Link :href="route('profile.edit')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <Link :href="route('admin.profile.edit')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
                                         Your Profile
                                     </Link>
                                     <Link :href="route('logout')" method="post" as="button" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">

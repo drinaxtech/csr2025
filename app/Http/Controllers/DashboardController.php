@@ -12,7 +12,6 @@ class DashboardController extends Controller
 
     public function __construct()
     {
-        // You can also use $this->middleware() here.
         if (Auth::check() && Auth::user()->role == 'admin') {
             abort(404, 'Not found');
         }

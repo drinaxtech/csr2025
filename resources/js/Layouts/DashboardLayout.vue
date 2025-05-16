@@ -11,7 +11,7 @@
                         </Link>
                     </div>
                     <div class="flex items-center ml-6">
-                        <div class="relative mr-4">
+                        <div style="display: none;" class="relative mr-4">
                             <button @click="isNotificationsOpen = !isNotificationsOpen" class="bg-white rounded-full p-2 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out" aria-expanded="false" aria-haspopup="true">
                                 <span class="sr-only">Notifications</span>
                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-6-6C5.928 5 4 6.979 4 9.5V17l2 2v-1.581A2 2 0 005 15.75h14a2 2 0 00-1.819-3.191L15 17z" /></svg>
@@ -64,16 +64,14 @@
                     </Link>
                     <Link :href="route('campaigns.index')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('campaigns.index') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
                         <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-        d="M5 15V5h12l2 4-2 4H7v6H5zm10-8h4m-8 4l2 2 4-4"/>
-</svg>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15V5h12l2 4-2 4H7v6H5zm10-8h4m-8 4l2 2 4-4"/>
+                        </svg>
                         All Campaigns
                     </Link>
                     <Link :href="route('my-campaigns')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('my-campaigns') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">
                         <svg class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-        d="M5 15V5h12l2 4-2 4H7v6H5zm10-8h4m-8 4l2 2 4-4"/>
-</svg>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15V5h12l2 4-2 4H7v6H5zm10-8h4m-8 4l2 2 4-4"/>
+                        </svg>
                         My Campaigns
                     </Link>
                     <Link :href="route('donations.history')" :class="['group flex items-center px-3 py-2 text-sm font-medium rounded-md focus:outline-none transition duration-150 ease-in-out', route().current('donations.history') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900']">

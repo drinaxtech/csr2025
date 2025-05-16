@@ -4,9 +4,10 @@ use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\ParameterController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\MailSettingsController;
 use App\Http\Controllers\DashboardController;
+
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -36,10 +37,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/donations/{donation}/confirmation', [DonationController::class, 'showConfirmation'])->name('donations.confirmation');
 });
 
-Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('/mail/settings', [MailSettingsController::class, 'index'])->name('mail.settings.index');
     Route::post('/mail/settings', [MailSettingsController::class, 'update'])->name('mail.settings.update');
+    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [AdminProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';

@@ -16,8 +16,12 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): Response
+    public function edit(Request $request)
     {
+        if($request->isMethod('get') && Auth::check() && Auth::user()->role == 'admin') {
+            return redirect()->route('admin.profile.edit');
+        }
+
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
